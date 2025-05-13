@@ -1,14 +1,14 @@
 J'ai été beaucoup trop ambitieux je n'ai donc pas pu terminer l'app. 
 
-Normalement il faut vérifier que la base de données est bien connectée et lancé via wamp ou mamp. 
+Lancer Wamp Xamp ou Mamp vérifier les mot de passe de la db et le user ainsi que le port 
 
 spring.datasource.url=jdbc:mysql://localhost:8889/aristote?useSSL=false&serverTimezone=UTC
 spring.datasource.username=root
 spring.datasource.password=root
 
-une fois lancé il suffit de lancé le programme avec mvn spring-boot:run
+Une fois lancé il suffit de lancé le programme avec mvn spring-boot:run
 
-Aprèq cela il faut aller sur www.localhost:8080 et tester la connexion soit avec github soit avec un des éléments qui est dans la db.
+Après il faut aller sur www.localhost:8080 et tester la connexion soit avec github soit avec un des éléments qui est dans la db.
 
 Le panier ne fonctionne pas dans le projet mais le code doit être bon je pense pareil pour la logique pour le reste sauf ce qui n'est pas complet ^^ j'avais fait en avance certain repo, service, entité etc.
 
