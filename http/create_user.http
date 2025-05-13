@@ -1,0 +1,13 @@
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "Jean",
+  "surname": "Dupont",
+  "email": "test@mail.com",
+  "password": "Test123$",
+  "billingAddress": "12 rue de la Paix",
+  "shippingAddress": "14 rue du Bac",
+  "vatNumber": "BE0123456789",
+  "creditCardNumber": "4111111111111111"
+}

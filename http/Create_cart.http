@@ -1,0 +1,15 @@
+//Ne fonctionne pas avec la sécurité de connexion car pas de token de connection envoyé
+POST http://localhost:8080/cart/add
+Content-Type: application/json
+
+{
+  "id": 12,
+  "userEmail": "kevin@example.com",
+  "items": [
+    {
+      "articleId": 1,
+      "title": "Chaise moderne",
+      "quantity": 2
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+databaseChangeLog:
+    - changeSet:
+          id: "2"
+          author: kd
+
+          changes:
+              # Table : order_statuses
+              - createTable:
+                    tableName: order_statuses
+                    columns:
+                        - column:
+                              name: id
+                              type: BIGINT
+                              autoIncrement: true
+                              constraints:
+                                  primaryKey: true
+                        - column:
+                              name: name
+                              type: VARCHAR(50)
+                              constraints:
+                                  nullable: false
+                                  unique: true
+
+              - addColumn:
+                    tableName: orders
+                    columns:
+                        - column:
+                              name: status_id
+                              type: BIGINT
+
+              - addForeignKeyConstraint:
+                    baseTableName: orders
+                    baseColumnNames: status_id
+                    referencedTableName: order_statuses
+                    referencedColumnNames: id
+                    constraintName: fk_order_status
+
+              # Ajout d'une colonne author à articles
+              - addColumn:
+                    tableName: articles
+                    columns:
+                        - column:
+                              name: author
+                              type: VARCHAR(100)
+
+              # Table : payments
+              - createTable:
+                    tableName: payments
+                    columns:
+                        - column:
+                              name: id
+                              type: BIGINT
+                              autoIncrement: true
+                              constraints:
+                                  primaryKey: true
+                        - column:
+                              name: user_id
+                              type: BIGINT
+                        - column:
+                              name: order_id
+                              type: BIGINT
+                        - column:
+                              name: stripe_payment_id
+                              type: VARCHAR(255)
+                        - column:
+                              name: status
+                              type: VARCHAR(50)
+                        - column:
+                              name: created_at
+                              type: DATETIME
+
+              - addForeignKeyConstraint:
+                    baseTableName: payments
+                    baseColumnNames: user_id
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    constraintName: fk_payment_user
+
+              - addForeignKeyConstraint:
+                    baseTableName: payments
+                    baseColumnNames: order_id
+                    referencedTableName: orders
+                    referencedColumnNames: id
+                    constraintName: fk_payment_order

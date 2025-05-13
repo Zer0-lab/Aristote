@@ -1,0 +1,324 @@
+J'ai été beaucoup trop ambitieux je n'ai donc pas pu terminer l'app. 
+
+Normalement il faut vérifier que la base de données est bien connectée et lancé via wamp ou mamp. 
+
+spring.datasource.url=jdbc:mysql://localhost:8889/aristote?useSSL=false&serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=root
+
+une fois lancé il suffit de lancé le programme avec mvn spring-boot:run
+
+Aprèq cela il faut aller sur www.localhost:8080 et tester la connexion soit avec github soit avec un des éléments qui est dans la db.
+
+Le panier ne fonctionne pas dans le projet mais le code doit être bon je pense pareil pour la logique pour le reste sauf ce qui n'est pas complet ^^ j'avais fait en avance certain repo, service, entité etc.
+
+le .env ne fonctionne pas la dépendance à été ajouté mais je n'ai pas pris le temps de le faire fonctionné à la place j'ai utiliser un -dev.properties pour la version de dev en prod il faut modifier le fichier application.properties.
+
+
+Ce que il y a en dessous est une aide pour moi ^^
+
+
+
+
+
+
+
+
+
+
+
+
+🗺️ ROADMAP DU PROJET ARISTOTE – étape par étape
+
+🔧 Phase 1 – Configuration et Base de données
+	1.	✅ application.properties / application.yml (connexion BDD, port, JPA, Liquibase…)
+	2.	✅ Fichier Liquibase principal (db.changelog-master.yaml)
+	3.	✅ Fichier Liquibase de création de schéma (001-aristote-init-schema.yaml)
+	4.	✅ Fichier Liquibase pour les ajouts (002-aristote-update-schema.yaml)
+	5.	✅ Fichier Liquibase d’insertion de données (003-aristote-insert-data.yaml)
+	6.	✅ Tester la génération automatique de la BDD avec mvn spring-boot:run
+
+⸻
+
+🧱 Phase 2 – Domaine (modèle et logique métier)
+	7.	✅ Créer les entités JPA :
+	•	User ✅
+	•	Role 
+	•	Article
+	•	Category
+	•	Cart, CartItem
+	•	Order, OrderItem
+	•	OrderStatus
+	•	Payment
+	8.	✅ Créer les repositories JpaRepository pour chaque entité
+	•	Exemple : UserRepository, ArticleRepository, etc.
+
+⸻
+
+🎯 Phase 3 – Services (logique applicative)
+	9.	✅ Créer les services (@Service) :
+	•	UserService (getAll, getById, etc.)
+	•	ArticleService
+	•	OrderService
+	•	CartService
+	•	PaymentService
+	10.	Ajouter les méthodes dans les services en fonction des besoins métier
+
+⸻
+
+📦 Phase 4 – DTOs (Data Transfer Objects)
+	11.	✅ Créer les DTOs pour découpler entités ↔ API :
+
+	•	UserProfileDTO, ArticleDTO, CartDTO, etc.
+
+	12.	Ajouter les mappers (manuels ou via MapStruct/Lombok)
+
+⸻
+
+🌐 Phase 5 – Contrôleurs REST
+	13.	✅ Créer les contrôleurs REST :
+
+	•	UserController
+	•	ArticleController
+	•	OrderController
+	•	CartController
+	•	PaymentController
+
+	14.	Implémenter les endpoints GET, POST, PUT, DELETE
+
+⸻
+
+🧪 Phase 6 – Tests et fichiers .http
+	15.	Créer un dossier test.http ou requests/
+	16.	Ajouter des fichiers .http pour tester l’API :
+
+	•	get-all-users.http
+	•	get-user-by-id.http
+	•	post-new-user.http
+	•	etc.
+
+	17.	Tester avec IntelliJ ou VS Code REST Client
+
+⸻
+
+🔐 Phase 7 – Sécurité (facultatif selon l’avancement)
+	18.	Ajouter Spring Security
+	19.	Ajouter gestion des rôles (ADMIN, CLIENT, VISITEUR)
+	20.	Sécuriser les endpoints sensibles
+
+
+
+
+    🧠 Fiche d’aide pour coder une entité JPA
+
+🔹 1. Nom de la classe
+	•	Doit être au singulier (ex. User, Article, Order)
+	•	Mettre @Entity
+	•	Ajouter @Table(name = "nom_table") si le nom de la table diffère du nom de la classe
+
+⸻
+
+🔹 2. Clé primaire (ID)
+	•	Ajouter un champ id de type Long
+	•	Annoter avec @Id + @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+⸻
+
+🔹 3. Champs simples (colonnes)
+	•	Chaque champ = une colonne en base
+	•	Utiliser des types Java : String, Integer, Double, LocalDateTime, etc.
+	•	Ajouter @Column(name = "nom_colonne") si le nom diffère
+	•	Si un champ ne peut pas être vide en BDD, ajouter @Column(nullable = false)
+
+⸻
+
+🔹 4. Relations entre entités
+	•	@ManyToOne : l’entité contient une référence vers une autre (ex. User → Role)
+	•	Exiger souvent @JoinColumn(name = "foreign_key")
+	•	@OneToMany : l’entité contient une liste (ex. User → List<Order>)
+	•	Doit avoir mappedBy et une List<>
+	•	@OneToOne : rarement, sauf cas spécifiques
+	•	@ManyToMany : pour les relations bidirectionnelles sans données supplémentaires
+
+⸻
+
+🔹 5. Constructeurs
+	•	Obligatoire : un constructeur vide
+	•	Facultatif : constructeur avec champs utiles
+
+⸻
+
+🔹 6. Getters / Setters
+	•	Tu peux les générer automatiquement avec Lombok :
+	•	@Getter @Setter
+	•	Ou @Data (mais attention à bien l’utiliser)
+
+⸻
+
+🔹 7. Lombok (optionnel mais recommandé)
+	•	@NoArgsConstructor
+	•	@AllArgsConstructor
+	•	@Builder pour faciliter la création d’objets
+
+⸻
+
+🔹 8. Timestamp (dates de création / maj)
+	•	Ajouter createdAt, updatedAt avec LocalDateTime
+	•	Ajouter @PrePersist et @PreUpdate dans une base class ou dans l’entité
+
+une fiche de réflexion sur les bases de données et les entités JPA
+
+// 🧩 Guide pour créer les Entity classes à partir des tables de la BDD Aristote
+
+// =============================
+// Table: roles
+// =============================
+// Fields:
+// - id (PK)
+// - name (unique, not null)
+//
+// Relations:
+// - OneToMany → users
+
+// =============================
+// Table: users
+// =============================
+// Fields:
+// - id (PK)
+// - name (not null)
+// - surname (not null)
+// - email (unique, not null)
+// - password (not null)
+// - role_id (FK → roles.id, not null)
+// - billing_address (not null)
+// - shipping_address (not null)
+// - vat_number
+// - credit_card_number
+// - created_at (not null)
+// - updated_at (not null)
+//
+// Relations:
+// - ManyToOne → Role
+// - OneToOne → Cart
+// - OneToMany → Orders, Payments
+
+// =============================
+// Table: categories
+// =============================
+// Fields:
+// - id (PK)
+// - name (unique, not null)
+//
+// Relations:
+// - OneToMany → Articles
+
+// =============================
+// Table: articles
+// =============================
+// Fields:
+// - id (PK)
+// - title (not null)
+// - isbn (unique)
+// - description
+// - image_url
+// - price (not null)
+// - quantity (not null)
+// - created_at
+// - updated_at
+// - category_id (FK → categories.id, not null)
+//
+// Relations:
+// - ManyToOne → Category
+// - OneToMany → CartItems, OrderItems
+
+// =============================
+// Table: carts
+// =============================
+// Fields:
+// - id (PK)
+// - user_id (FK → users.id, unique, not null)
+// - created_at (not null)
+//
+// Relations:
+// - OneToOne ← User
+// - OneToMany → CartItems
+
+// =============================
+// Table: cart_items
+// =============================
+// Fields:
+// - id (PK)
+// - quantity (not null)
+// - cart_id (FK → carts.id, not null)
+// - article_id (FK → articles.id, not null)
+//
+// Relations:
+// - ManyToOne → Cart
+// - ManyToOne → Article
+
+// =============================
+// Table: orders
+// =============================
+// Fields:
+// - id (PK)
+// - user_id (FK → users.id, not null)
+// - order_code (not null)
+// - status_id (FK → order_statuses.id, not null)
+// - created_at
+// - updated_at
+//
+// Relations:
+// - ManyToOne → User
+// - ManyToOne → OrderStatus
+// - OneToMany → OrderItems, Payments
+
+// =============================
+// Table: order_statuses
+// =============================
+// Fields:
+// - id (PK)
+// - name (unique, not null)
+//
+// Relations:
+// - OneToMany → Orders
+
+// =============================
+// Table: order_items
+// =============================
+// Fields:
+// - id (PK)
+// - order_id (FK → orders.id, not null)
+// - article_id (FK → articles.id, not null)
+// - quantity (not null)
+// - price_at_purchase (not null)
+//
+// Relations:
+// - ManyToOne → Order
+// - ManyToOne → Article
+
+// =============================
+// Table: payments
+// =============================
+// Fields:
+// - id (PK)
+// - user_id (FK → users.id, not null)
+// - order_id (FK → orders.id, not null)
+// - stripe_payment_id
+// - status
+// - created_at
+//
+// Relations:
+// - ManyToOne → User
+// - ManyToOne → Order
+
+
+ Structure à suivre pour chaque entité
+
+Composant       Dossier                    Exemple avec User
+Entity          be.xxx.db.model            UserEntity
+Repository      be.xxx.db.repository       UserRepository
+DTO             be.xxx.api.dto             UserProfileDTO
+Mapper          be.xxx.domain.mapper       UserMapper
+Service         be.xxx.domain.service      UserService
+Controller      be.xxx.api.controller      UserController
+.http           http.test.http                  get-all-users.http

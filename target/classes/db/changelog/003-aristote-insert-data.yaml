@@ -1,0 +1,524 @@
+databaseChangeLog:
+  - changeSet:
+      id: data-v1.0
+      author: kd
+      changes:
+        # Désactivation temporaire des contraintes pour éviter les erreurs FK
+        - sql:
+            sql: SET FOREIGN_KEY_CHECKS=0;
+
+        # Insertion des rôles
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: name, value: "ADMIN" }
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: name, value: "CLIENT" }
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: name, value: "VISITEUR" }
+
+        # Insertion des statuts de commande
+        - insert:
+            tableName: order_statuses
+            columns:
+              - column: { name: name, value: "PENDING" }
+        - insert:
+            tableName: order_statuses
+            columns:
+              - column: { name: name, value: "PAID" }
+        - insert:
+            tableName: order_statuses
+            columns:
+              - column: { name: name, value: "SHIPPED" }
+        - insert:
+            tableName: order_statuses
+            columns:
+              - column: { name: name, value: "DELIVERED" }
+        - insert:
+            tableName: order_statuses
+            columns:
+              - column: { name: name, value: "CANCELLED" }
+
+        # Utilisateur 1 – Jean Dupont (ADMIN, avec TVA)
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: name, value: "Jean" }
+              - column: { name: surname, value: "Dupont" }
+              - column: { name: email, value: "jean.dupont@exemple.be" }
+              - column: { name: password, value: "motdepassehashé1" }
+              - column: { name: role_id, valueNumeric: 1 }
+              - column:
+                  {
+                    name: billing_address,
+                    value: "Rue Royale 5, 1000 Bruxelles",
+                  }
+              - column:
+                  {
+                    name: shipping_address,
+                    value: "Rue Neuve 7, 1000 Bruxelles",
+                  }
+              - column: { name: vat_number, value: "BE0123456789" }
+              - column: { name: credit_card_number, value: "4111111111111111" }
+              - column: { name: created_at, valueDate: "2024-01-01T09:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-01T09:00:00" }
+
+        # Utilisateur 2 – Sophie Lemaire (CLIENT, avec TVA)
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: name, value: "Sophie" }
+              - column: { name: surname, value: "Lemaire" }
+              - column: { name: email, value: "sophie.lemaire@exemple.be" }
+              - column: { name: password, value: "motdepassehashé2" }
+              - column: { name: role_id, valueNumeric: 2 }
+              - column:
+                  {
+                    name: billing_address,
+                    value: "Avenue Louise 100, 1050 Ixelles",
+                  }
+              - column:
+                  {
+                    name: shipping_address,
+                    value: "Boulevard Général Jacques 45, 1050 Ixelles",
+                  }
+              - column: { name: vat_number, value: "BE9876543210" }
+              - column: { name: credit_card_number, value: "4222222222222" }
+              - column: { name: created_at, valueDate: "2024-01-02T10:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-02T10:00:00" }
+
+        # Utilisateur 3 – David Leroy (CLIENT, sans TVA)
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: name, value: "David" }
+              - column: { name: surname, value: "Leroy" }
+              - column: { name: email, value: "david.leroy@exemple.be" }
+              - column: { name: password, value: "motdepassehashé3" }
+              - column: { name: role_id, valueNumeric: 2 }
+              - column:
+                  {
+                    name: billing_address,
+                    value: "Rue de Namur 80, 5000 Namur",
+                  }
+              - column:
+                  {
+                    name: shipping_address,
+                    value: "Rue des Carmes 21, 5000 Namur",
+                  }
+              - column: { name: credit_card_number, value: "4333333333333" }
+              - column: { name: created_at, valueDate: "2024-01-03T11:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-03T11:00:00" }
+
+        # Utilisateur 4 – Claire Martin (VISITEUR, sans TVA)
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: name, value: "Claire" }
+              - column: { name: surname, value: "Martin" }
+              - column: { name: email, value: "claire.martin@exemple.be" }
+              - column: { name: password, value: "motdepassehashé4" }
+              - column: { name: role_id, valueNumeric: 3 }
+              - column:
+                  {
+                    name: billing_address,
+                    value: "Place Verte 3, 6000 Charleroi",
+                  }
+              - column:
+                  {
+                    name: shipping_address,
+                    value: "Place Verte 3, 6000 Charleroi",
+                  }
+              - column: { name: credit_card_number, value: "4444444444444" }
+              - column: { name: created_at, valueDate: "2024-01-04T12:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-04T12:00:00" }
+
+        # Utilisateur 5 – Nicolas Fontaine (CLIENT, sans TVA)
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: name, value: "Nicolas" }
+              - column: { name: surname, value: "Fontaine" }
+              - column: { name: email, value: "nicolas.fontaine@exemple.be" }
+              - column: { name: password, value: "motdepassehashé5" }
+              - column: { name: role_id, valueNumeric: 2 }
+              - column:
+                  { name: billing_address, value: "Rue du Musée 12, 7000 Mons" }
+              - column:
+                  {
+                    name: shipping_address,
+                    value: "Rue du Musée 12, 7000 Mons",
+                  }
+              - column: { name: credit_card_number, value: "4555555555555" }
+              - column: { name: created_at, valueDate: "2024-01-05T13:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-05T13:00:00" }
+
+        # Catégories de livres
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Roman" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Bande dessinée" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Essai" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Science-fiction" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Fantastique" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Biographie" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Histoire" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Policier" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Thriller" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Jeunesse" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Poésie" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Théâtre" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Développement personnel" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Philosophie" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Cuisine" }
+
+        # Articles
+        - insert:
+            tableName: articles
+            columns:
+              - column: { name: title, value: "L'Étranger" }
+              - column: { name: isbn, value: "9782070360024" }
+              - column:
+                  {
+                    name: description,
+                    value: "Un roman existentialiste d'Albert Camus.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/letranger.jpg",
+                  }
+              - column: { name: price, valueNumeric: 10.90 }
+              - column: { name: quantity, valueNumeric: 3 }
+              - column: { name: category_id, valueNumeric: 1 } # Roman
+              - column: { name: created_at, valueDate: "2024-01-10T10:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T10:00:00" }
+
+        - insert:
+            tableName: articles
+            columns:
+              - column: { name: title, value: "Astérix chez les Belges" }
+              - column: { name: isbn, value: "9782012101620" }
+              - column:
+                  {
+                    name: description,
+                    value: "Un classique de la bande dessinée francophone.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/asterixbelges.jpg",
+                  }
+              - column: { name: price, valueNumeric: 7.50 }
+              - column: { name: quantity, valueNumeric: 2 }
+              - column: { name: category_id, valueNumeric: 2 } # Bande dessinée
+              - column: { name: created_at, valueDate: "2024-01-10T11:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T11:00:00" }
+
+        - insert:
+            tableName: articles
+            columns:
+              - column: { name: title, value: "Pensées pour moi-même" }
+              - column: { name: isbn, value: "9782253096743" }
+              - column:
+                  {
+                    name: description,
+                    value: "Une œuvre de philosophie stoïcienne par Marc Aurèle.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/marcaurele.jpg",
+                  }
+              - column: { name: price, valueNumeric: 6.90 }
+              - column: { name: quantity, valueNumeric: 5 }
+              - column: { name: category_id, valueNumeric: 14 } # Philosophie
+              - column: { name: created_at, valueDate: "2024-01-10T12:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T12:00:00" }
+
+        - insert:
+            tableName: articles
+            columns:
+              - column: { name: title, value: "Recettes belges authentiques" }
+              - column: { name: isbn, value: "9782930352335" }
+              - column:
+                  {
+                    name: description,
+                    value: "Un recueil de recettes traditionnelles belges.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/cuisinebelge.jpg",
+                  }
+              - column: { name: price, valueNumeric: 14.95 }
+              - column: { name: quantity, valueNumeric: 4 }
+              - column: { name: category_id, valueNumeric: 15 } # Cuisine
+              - column: { name: created_at, valueDate: "2024-01-10T12:30:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T12:30:00" }
+
+        - insert:
+            tableName: articles
+            columns:
+              - column:
+                  { name: title, value: "Harry Potter à l'école des sorciers" }
+              - column: { name: isbn, value: "9782070643027" }
+              - column:
+                  {
+                    name: description,
+                    value: "Premier tome de la célèbre saga magique.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/harrypotter.jpg",
+                  }
+              - column: { name: price, valueNumeric: 12.00 }
+              - column: { name: quantity, valueNumeric: 1 }
+              - column: { name: category_id, valueNumeric: 5 } # Fantastique
+              - column: { name: created_at, valueDate: "2024-01-10T13:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T13:00:00" }
+
+        - insert:
+            tableName: articles
+            columns:
+              - column: { name: title, value: "La ferme des animaux" }
+              - column: { name: isbn, value: "9782070368227" }
+              - column:
+                  {
+                    name: description,
+                    value: "Fable politique de George Orwell.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/fermeanimaux.jpg",
+                  }
+              - column: { name: price, valueNumeric: 9.60 }
+              - column: { name: quantity, valueNumeric: 2 }
+              - column: { name: category_id, valueNumeric: 9 } # Thriller
+              - column: { name: created_at, valueDate: "2024-01-10T13:15:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T13:15:00" }
+
+        - insert:
+            tableName: articles
+            columns:
+              - column: { name: title, value: "Le journal d'Anne Frank" }
+              - column: { name: isbn, value: "9782253152098" }
+              - column:
+                  {
+                    name: description,
+                    value: "Témoignage poignant d'une adolescente en temps de guerre.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/annefrank.jpg",
+                  }
+              - column: { name: price, valueNumeric: 8.80 }
+              - column: { name: quantity, valueNumeric: 5 }
+              - column: { name: category_id, valueNumeric: 6 } # Biographie
+              - column: { name: created_at, valueDate: "2024-01-10T13:30:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T13:30:00" }
+
+        - insert:
+            tableName: articles
+            columns:
+              - column: { name: title, value: "La poésie de Prévert" }
+              - column: { name: isbn, value: "9782070380472" }
+              - column:
+                  {
+                    name: description,
+                    value: "Une sélection des poèmes les plus célèbres de Jacques Prévert.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/prevert.jpg",
+                  }
+              - column: { name: price, valueNumeric: 7.20 }
+              - column: { name: quantity, valueNumeric: 0 }
+              - column: { name: category_id, valueNumeric: 11 } # Poésie
+              - column: { name: created_at, valueDate: "2024-01-10T13:45:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T13:45:00" }
+
+        - insert:
+            tableName: articles
+            columns:
+              - column:
+                  {
+                    name: title,
+                    value: "Petit manuel de développement personnel",
+                  }
+              - column: { name: isbn, value: "9782266272026" }
+              - column:
+                  {
+                    name: description,
+                    value: "Conseils pratiques pour mieux vivre au quotidien.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/devperso.jpg",
+                  }
+              - column: { name: price, valueNumeric: 11.50 }
+              - column: { name: quantity, valueNumeric: 3 }
+              - column: { name: category_id, valueNumeric: 13 } # Développement personnel
+              - column: { name: created_at, valueDate: "2024-01-10T14:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T14:00:00" }
+
+        - insert:
+            tableName: articles
+            columns:
+              - column: { name: title, value: "Introduction à la philosophie" }
+              - column: { name: isbn, value: "9782130790955" }
+              - column:
+                  {
+                    name: description,
+                    value: "Un guide clair pour débuter en philosophie.",
+                  }
+              - column:
+                  {
+                    name: image_url,
+                    value: "https://exemple.be/images/philosophie.jpg",
+                  }
+              - column: { name: price, valueNumeric: 13.75 }
+              - column: { name: quantity, valueNumeric: 4 }
+              - column: { name: category_id, valueNumeric: 14 }
+              - column: { name: created_at, valueDate: "2024-01-10T14:15:00" }
+              - column: { name: updated_at, valueDate: "2024-01-10T14:15:00" }
+
+        # Panier pour Jean Dupont
+        - insert:
+            tableName: carts
+            columns:
+              - column: { name: user_id, valueNumeric: 1 }
+              - column: { name: created_at, valueDate: "2024-01-15T09:00:00" }
+
+        # Article dans le panier de Jean Dupont
+        - insert:
+            tableName: cart_items
+            columns:
+              - column: { name: cart_id, valueNumeric: 1 }
+              - column: { name: article_id, valueNumeric: 1 }
+              - column: { name: quantity, valueNumeric: 1 }
+
+        # Panier pour Claire Martin
+        - insert:
+            tableName: carts
+            columns:
+              - column: { name: user_id, valueNumeric: 4 }
+              - column: { name: created_at, valueDate: "2024-01-15T09:30:00" }
+
+        # Article dans le panier de Claire Martin
+        - insert:
+            tableName: cart_items
+            columns:
+              - column: { name: cart_id, valueNumeric: 2 }
+              - column: { name: article_id, valueNumeric: 5 }
+              - column: { name: quantity, valueNumeric: 2 }
+
+        # Commande pour Sophie Lemaire
+        - insert:
+            tableName: orders
+            columns:
+              - column: { name: user_id, valueNumeric: 2 }
+              - column: { name: order_code, value: "ORD-20240102-001" }
+              - column: { name: status, value: "PAID" }
+              - column: { name: created_at, valueDate: "2024-01-02T11:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-02T11:00:00" }
+
+        # Article dans la commande de Sophie Lemaire
+        - insert:
+            tableName: order_items
+            columns:
+              - column: { name: order_id, valueNumeric: 1 }
+              - column: { name: article_id, valueNumeric: 2 }
+              - column: { name: quantity, valueNumeric: 1 }
+              - column: { name: price_at_purchase, valueNumeric: 7.50 }
+
+        # Commande pour Nicolas Fontaine
+        - insert:
+            tableName: orders
+            columns:
+              - column: { name: user_id, valueNumeric: 5 }
+              - column: { name: order_code, value: "ORD-20240105-001" }
+              - column: { name: status, value: "SHIPPED" }
+              - column: { name: created_at, valueDate: "2024-01-05T14:00:00" }
+              - column: { name: updated_at, valueDate: "2024-01-06T08:00:00" }
+
+        # Article dans la commande de Nicolas Fontaine
+        - insert:
+            tableName: order_items
+            columns:
+              - column: { name: order_id, valueNumeric: 2 }
+              - column: { name: article_id, valueNumeric: 3 }
+              - column: { name: quantity, valueNumeric: 2 }
+              - column: { name: price_at_purchase, valueNumeric: 6.90 }
+
+        # Paiement pour Sophie Lemaire
+        - insert:
+            tableName: payments
+            columns:
+              - column: { name: user_id, valueNumeric: 2 }
+              - column: { name: order_id, valueNumeric: 1 }
+              - column: { name: stripe_payment_id, value: "pi_001_teststripe" }
+              - column: { name: status, value: "SUCCEEDED" }
+              - column: { name: created_at, valueDate: "2024-01-02T11:05:00" }
+
+        # Paiement pour Nicolas Fontaine
+        - insert:
+            tableName: payments
+            columns:
+              - column: { name: user_id, valueNumeric: 5 }
+              - column: { name: order_id, valueNumeric: 2 }
+              - column: { name: stripe_payment_id, value: "pi_002_teststripe" }
+              - column: { name: status, value: "SUCCEEDED" }
+              - column: { name: created_at, valueDate: "2024-01-06T08:15:00" }

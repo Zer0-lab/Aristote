@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil - Articles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .articles {
+            margin-top: 2rem;
+        }
+
+        .article {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #ccc;
+        }
+
+        .cart-container {
+            margin-top: 2rem;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 1rem;
+            box-shadow: 0 0 5px #ccc;
+            display: none;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 0.5rem 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>
+            <h1>Bienvenue sur Aristote</h1>
+            <p>Vous êtes connecté. Voici la liste des articles :</p>
+        </div>
+        <div th:if="${#authorization.expression('isAuthenticated()')}">
+            <span th:text="'Bonjour, ' + ${fullName}"></span>
+            <div class="button-group">
+                <a th:href="@{/profile}" class="btn">Mon Profil</a>
+                <button class="btn" onclick="toggleCart()">🛒 Mon Panier</button>
+                <a th:href="@{/logout}" class="btn">Déconnexion</a>
+            </div>
+        </div>
+        <div th:if="${#authorization.expression('!isAuthenticated()')}">
+            <div class="button-group">
+                <a th:href="@{/login}" class="btn">Se connecter</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="articles" id="articlesContainer"></div>
+
+    <!-- Contenu du panier -->
+    <div class="cart-container" id="cartContainer">
+        <h2>Votre Panier</h2>
+        <div id="cartItems"></div>
+    </div>
+
+    <script>
+        // Affichage des articles avec boutons
+        fetch('/article/all')
+            .then(response => {
+                if (!response.ok) throw new Error('Erreur lors de la récupération des articles');
+                return response.json();
+            })
+            .then(articles => {
+                const container = document.getElementById('articlesContainer');
+                articles.forEach(article => {
+                    const articleDiv = document.createElement('div');
+                    articleDiv.classList.add('article');
+
+                    const title = document.createElement('h2');
+                    title.textContent = article.title;
+
+                    const description = document.createElement('p');
+                    description.textContent = article.description;
+
+                    const buttonGroup = document.createElement('div');
+                    buttonGroup.classList.add('button-group');
+
+                    const addButton = document.createElement('button');
+                    addButton.className = 'btn';
+                    addButton.textContent = '+';
+                    addButton.onclick = () => {
+                        fetch(`/cart/add/${article.id}`, {
+                            method: 'POST'
+                        }).then(() => toggleCart());
+                    };
+
+                    const removeButton = document.createElement('button');
+                    removeButton.className = 'btn';
+                    removeButton.textContent = '−';
+                    removeButton.onclick = () => {
+                        fetch(`/cart/remove/${article.id}`, {
+                            method: 'POST'
+                        }).then(() => toggleCart());
+                    };
+
+                    buttonGroup.appendChild(addButton);
+                    buttonGroup.appendChild(removeButton);
+
+                    articleDiv.appendChild(title);
+                    articleDiv.appendChild(description);
+                    articleDiv.appendChild(buttonGroup);
+                    container.appendChild(articleDiv);
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
+
+        // Fonction d'affichage du panier
+        function toggleCart() {
+            const cartContainer = document.getElementById('cartContainer');
+            const cartItemsDiv = document.getElementById('cartItems');
+
+            if (cartContainer.style.display === 'none') {
+                fetch('/cart')
+                    .then(response => {
+                        if (!response.ok) throw new Error('Erreur récupération panier');
+                        return response.json();
+                    })
+                    .then(cart => {
+                        cartItemsDiv.innerHTML = '';
+                        if (cart.items.length === 0) {
+                            cartItemsDiv.innerHTML = '<p>Votre panier est vide.</p>';
+                        } else {
+                            cart.items.forEach(item => {
+                                const div = document.createElement('div');
+                                div.classList.add('cart-item');
+                                div.textContent = `${item.title} (x${item.quantity})`;
+                                cartItemsDiv.appendChild(div);
+                            });
+                        }
+                        cartContainer.style.display = 'block';
+                    })
+                    .catch(error => {
+                        console.error('Erreur panier :', error);
+                    });
+            } else {
+                cartContainer.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>

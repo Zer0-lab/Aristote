@@ -1,0 +1,14 @@
+### Modifier un utilisateur (PUT)
+PUT http://localhost:8080/users/1
+Content-Type: application/json
+
+{
+  "name": "Kevin",
+  "surname": "Durant",
+  "email": "kevin@example.com",
+  "password": "Secure@2025",
+  "billingAddress": "123 rue de la Facturation",
+  "shippingAddress": "456 rue de la Livraison",
+  "vatNumber": "BE123456789",
+  "creditCardNumber": "4111111111111111"
+}

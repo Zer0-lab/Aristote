@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Compléter votre inscription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 1rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 1.5rem;
+            padding: 0.7rem 1.2rem;
+            background-color: #1d4ed8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Compléter votre inscription</h2>
+    <form th:action="@{/oauth2/register}" th:object="${user}" method="post" onsubmit="return validatePasswords()">
+        <label>Nom :
+            <input type="text" th:field="*{name}" required>
+        </label>
+
+        <label>Prénom :
+            <input type="text" th:field="*{surname}" required>
+        </label>
+
+        <label>Email :
+            <input type="email" th:field="*{email}" required>
+        </label>
+
+        <label>Mot de passe :
+            <input type="password" th:field="*{password}" id="password" required>
+        </label>
+
+        <label>Confirmer le mot de passe :
+            <input type="password" id="confirmPassword" required>
+        </label>
+        <div id="passwordError" class="error">Les mots de passe ne correspondent pas.</div>
+
+        <label>Adresse de facturation :
+            <input type="text" th:field="*{billingAddress}" required>
+        </label>
+
+        <label>Adresse de livraison :
+            <input type="text" th:field="*{shippingAddress}" required>
+        </label>
+
+        <label>Numéro de TVA (facultatif) :
+            <input type="text" th:field="*{vatNumber}">
+        </label>
+
+        <label>Numéro de carte (facultatif) :
+            <input type="text" th:field="*{creditCardNumber}">
+        </label>
+
+        <button type="submit">S'inscrire</button>
+    </form>
+</div>
+
+<script>
+function validatePasswords() {
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    const error = document.getElementById('passwordError');
+
+    if (password !== confirm) {
+        error.style.display = 'block';
+        return false;
+    }
+
+    error.style.display = 'none';
+    return true;
+}
+</script>
+</body>
+</html>
